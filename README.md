@@ -333,4 +333,4 @@ end
 
 🌀 **Less DSL. More types.** As much as possible LowType looks just like Ruby if it had types. There's no special method calls for the base functionality, and defining types at runtime simply uses a `type()` method which almost looks like a `type` keyword, had Ruby implemented types.
 
-🤖 **AI makes you dumb.** AI is theoretically a cool concept but in practice capitalism just uses it to steal wealth.
+💡 **Dedicated to David.** A kind person and an electrical engineer who I'll never be as smart as. WTF even is electricity?
