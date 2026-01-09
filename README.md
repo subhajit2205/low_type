@@ -237,7 +237,7 @@ end
 - `Boolean` - Accepts `true`/`false`) [UNRELEASED]
 - `Enum` - Usage: `Enum[1, 2, 3]` [[CONCEPT STAGE](https://github.com/low-rb/low_type/issues/6)]
 - `Tuple` (subclass of `Array`)
-- `Status` (subclass of `Integer`) - TODO: Check integer to be a valid HTTP status code
+- `Status` (subclass of `Integer`)
 - `Headers` (subclass of `Hash`)
 - `HTML` (subclass of `String`) - TODO: Check that string is HTML
 - `JSON` (subclass of `String`) - TODO: Check that string is JSON
