@@ -125,7 +125,7 @@ RSpec.describe LowHello do
 
     context 'when no arg provided' do
       let(:error_message) do
-        "Invalid argument type 'Integer' for parameter 'greeting'. Valid types: '[Symbol] | String'"
+        "Invalid argument type 'Integer' for parameter 'greeting'. Valid types: 'String | [Symbol]'"
       end
 
       it 'raises an argument type error' do

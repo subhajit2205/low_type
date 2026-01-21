@@ -34,7 +34,7 @@ class LowHello
   end
 
   def typed_arg_and_invalid_default_typed_value(greeting = String | Array[Symbol] | value(Integer))
-    # => raises TypeError. A default value(type) that is not nil still has to be a valid type.
+    # => raises TypeError... a default value(T) that is not nil still has to be a valid type.
     greeting
   end
 
