@@ -2,7 +2,7 @@
 
 require 'forwardable'
 
-module LowType
+module Low
   class MethodProxy
     extend Forwardable
 

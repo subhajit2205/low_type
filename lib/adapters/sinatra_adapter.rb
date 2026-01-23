@@ -7,7 +7,7 @@ require_relative '../interfaces/adapter_interface'
 require_relative '../proxies/return_proxy'
 require_relative '../types/error_types'
 
-module LowType
+module Low
   module Adapter
     # We don't use https://sinatrarb.com/extensions.html because we need to type check all Ruby methods (not just Sinatra) at a lower level.
     class Sinatra < AdapterInterface

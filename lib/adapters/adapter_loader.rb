@@ -2,7 +2,7 @@
 
 require_relative 'sinatra_adapter'
 
-module LowType
+module Low
   module Adapter
     class Loader
       class << self

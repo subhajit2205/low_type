@@ -3,7 +3,7 @@
 require_relative '../expressions/type_expression'
 require_relative '../expressions/value_expression'
 
-module LowType
+module Low
   class ExpressionFactory
     class << self
       def type_expression_with_value(type:)

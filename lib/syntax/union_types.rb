@@ -14,7 +14,7 @@ class Object
   # "|" bitwise operator on Integer is not defined when the receiver is an Integer class, so we are not in conflict.
   class << self
     def |(expression)
-      ::LowType::TypeExpression.new(type: self) | expression
+      ::Low::TypeExpression.new(type: self) | expression
     end
   end
 end

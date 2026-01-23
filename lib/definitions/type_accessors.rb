@@ -4,7 +4,7 @@ require_relative '../expressions/type_expression'
 require_relative '../proxies/return_proxy'
 require_relative '../queries/type_query'
 
-module LowType
+module Low
   module TypeAccessors
     def type_reader(named_expressions)
       named_expressions.each do |name, exp|
@@ -52,7 +52,7 @@ module LowType
     def expression(expression)
       if expression.is_a?(::Expressions::Expression)
         expression
-      elsif ::LowType::TypeQuery.type?(expression)
+      elsif ::Low::TypeQuery.type?(expression)
         TypeExpression.new(type: expression)
       end
     end

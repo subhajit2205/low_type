@@ -2,7 +2,7 @@
 
 require_relative '../expressions/type_expression'
 
-module LowType
+module Low
   # TODO: Unit test.
   class TypeQuery
     class << self
@@ -19,7 +19,7 @@ module LowType
       end
 
       def complex_type?(expression:)
-        LowType::COMPLEX_TYPES.include?(expression) || typed_array?(expression:) || typed_hash?(expression:)
+        Low::COMPLEX_TYPES.include?(expression) || typed_array?(expression:) || typed_hash?(expression:)
       end
 
       private

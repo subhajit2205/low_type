@@ -3,7 +3,7 @@
 require_relative '../interfaces/error_interface'
 require_relative '../types/error_types'
 
-module LowType
+module Low
   class LocalProxy < ErrorInterface
     attr_reader :type_expression, :name
 

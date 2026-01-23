@@ -3,7 +3,7 @@
 require_relative '../factories/type_factory'
 require_relative 'status'
 
-module LowType
+module Low
   COMPLEX_TYPES = [
     Boolean = TypeFactory.complex_type(Object),
     Headers = TypeFactory.complex_type(Hash),

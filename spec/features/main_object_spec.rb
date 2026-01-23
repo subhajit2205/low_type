@@ -36,7 +36,7 @@ RSpec.describe 'main object' do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'greeting'. Valid types: 'String'" }
 
       it 'raises an argument error' do
-        expect { typed_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { typed_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end

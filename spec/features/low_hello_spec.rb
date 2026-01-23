@@ -37,7 +37,7 @@ RSpec.describe LowHello do
       let(:error_message) { "Invalid argument type 'Integer' for parameter 'greeting'. Valid types: 'String'" }
 
       it 'raises an invalid type error' do
-        expect { hello }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe LowHello do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'greeting'. Valid types: 'String'" }
 
       it 'raises an argument error' do
-        expect { hello.typed_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello.typed_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe LowHello do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'greeting'. Valid types: 'String'" }
 
       it 'raises an argument error' do
-        expect { hello.typed_arg_without_body }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello.typed_arg_without_body }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -91,8 +91,8 @@ RSpec.describe LowHello do
       let(:error_message) { "Invalid argument type 'Integer' for parameter 'greeting'. Valid types: 'String'" }
 
       it 'raises an argument type error' do
-        # => raises LowType::ArgumentTypeError. A default value that is not nil still has to be an allowed type.
-        expect { hello.typed_arg_and_invalid_default_value }.to raise_error(LowType::ArgumentTypeError, error_message)
+        # => raises Low::ArgumentTypeError. A default value that is not nil still has to be an allowed type.
+        expect { hello.typed_arg_and_invalid_default_value }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -122,10 +122,10 @@ RSpec.describe LowHello do
       end
 
       it 'raises an argument type error' do
-        # => raises LowType::ArgumentTypeError. A default value(type) that is not nil still has to be an allowed type.
+        # => raises Low::ArgumentTypeError. A default value(type) that is not nil still has to be an allowed type.
         expect do
           hello.typed_arg_and_invalid_default_typed_value
-        end.to raise_error(LowType::ArgumentTypeError, error_message)
+        end.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -144,7 +144,7 @@ RSpec.describe LowHello do
       end
 
       it 'raises an invalid type error' do
-        expect { hello.multiple_typed_args(true) }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello.multiple_typed_args(true) }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 
@@ -154,7 +154,7 @@ RSpec.describe LowHello do
       end
 
       it 'raises an argument error' do
-        expect { hello.multiple_typed_args }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello.multiple_typed_args }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -173,7 +173,7 @@ RSpec.describe LowHello do
       it 'raises an argument type error' do
         expect do
           hello.multiple_typed_args_and_default_value(true)
-        end.to raise_error(LowType::ArgumentTypeError, error_message)
+        end.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 
@@ -195,7 +195,7 @@ RSpec.describe LowHello do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'greetings'. Valid types: '[String]'" }
 
       it 'raises an argument error' do
-        expect { hello.typed_array_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello.typed_array_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 
@@ -214,7 +214,7 @@ RSpec.describe LowHello do
         after { LowType.configure { |config| config.deep_type_check = false } }
 
         it 'raises an argument error' do
-          expect { hello.typed_array_arg(greetings) }.to raise_error(LowType::ArgumentTypeError, error_message)
+          expect { hello.typed_array_arg(greetings) }.to raise_error(Low::ArgumentTypeError, error_message)
         end
       end
     end
@@ -229,7 +229,7 @@ RSpec.describe LowHello do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'goodbyes'. Valid types: '[String | nil]'" }
 
       it 'raises an argument error' do
-        expect { hello.typed_nilable_array_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { hello.typed_nilable_array_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 

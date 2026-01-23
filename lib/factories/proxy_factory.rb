@@ -10,7 +10,7 @@ require_relative '../proxies/return_proxy'
 require_relative '../queries/file_parser'
 require_relative '../syntax/syntax'
 
-module LowType
+module Low
   class ProxyFactory
     using ::LowType::Syntax
 
@@ -103,7 +103,7 @@ module LowType
             expression = local_variable
           elsif local_variable.class == Class && local_variable < ::Expressions::Expression
             expression = local_variable.new(provider_key: name)
-          elsif ::LowType::TypeQuery.type?(local_variable)
+          elsif ::Low::TypeQuery.type?(local_variable)
             expression = TypeExpression.new(type: local_variable)
           end
 

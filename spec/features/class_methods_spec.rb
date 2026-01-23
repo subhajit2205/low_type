@@ -23,7 +23,7 @@ RSpec.describe ClassMethods do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'goodbye'. Valid types: 'String'" }
 
       it 'raises an argument error' do
-        expect { described_class.inline_class_typed_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { described_class.inline_class_typed_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
@@ -37,7 +37,7 @@ RSpec.describe ClassMethods do
       let(:error_message) { "Invalid argument type 'NilClass' for parameter 'goodbye'. Valid types: 'String'" }
 
       it 'raises an argument error' do
-        expect { described_class.class_typed_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
+        expect { described_class.class_typed_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end

@@ -17,7 +17,7 @@ RSpec.describe 'TypeAccessors' do
       end
 
       it 'raises a return type error' do
-        expect { subject.name }.to raise_error(LowType::ReturnTypeError)
+        expect { subject.name }.to raise_error(Low::ReturnTypeError)
       end
     end
   end
@@ -32,7 +32,7 @@ RSpec.describe 'TypeAccessors' do
 
     context 'when the setter receives an invalid type' do
       it 'raises an argument type error' do
-        expect { subject.name = 123 }.to raise_error(LowType::ArgumentTypeError)
+        expect { subject.name = 123 }.to raise_error(Low::ArgumentTypeError)
       end
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe 'TypeAccessors' do
 
     context 'when the setter receives an invalid type' do
       it 'raises an argument type error' do
-        expect { subject.name = 123 }.to raise_error(LowType::ArgumentTypeError)
+        expect { subject.name = 123 }.to raise_error(Low::ArgumentTypeError)
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe 'TypeAccessors' do
       end
 
       it 'raises a return type error' do
-        expect { subject.name }.to raise_error(LowType::ReturnTypeError)
+        expect { subject.name }.to raise_error(Low::ReturnTypeError)
       end
     end
   end

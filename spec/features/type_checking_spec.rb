@@ -45,7 +45,7 @@ RSpec.describe 'LowType.config.type_checking' do
 
       context 'when arg is wrong type' do
         it 'raises an argument type error' do
-          expect { type_checking.typed_arg(123) }.to raise_error(ArgumentTypeError)
+          expect { type_checking.typed_arg(123) }.to raise_error(Low::ArgumentTypeError)
         end
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LowType
+module Low
   class FileProxy
     attr_reader :path, :scope
     attr_accessor :start_line, :end_line

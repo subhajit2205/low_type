@@ -3,7 +3,7 @@
 require_relative 'complex_type'
 require_relative 'error_types'
 
-module LowType
+module Low
   # Status is an Integer for type checking, but an instance of StatusCode for advanced functionality.
   class Status < Integer
     extend ComplexType

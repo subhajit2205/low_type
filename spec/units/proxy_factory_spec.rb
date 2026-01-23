@@ -5,10 +5,10 @@ require_relative '../../lib/factories/proxy_factory'
 require_relative '../../lib/proxies/file_proxy'
 require_relative '../../lib/queries/file_parser'
 
-RSpec.describe LowType::ProxyFactory do
+RSpec.describe Low::ProxyFactory do
   describe '.return_proxy' do
     let(:file) do
-      LowType::FileProxy.new(
+      Low::FileProxy.new(
         path: '/path/to/test_class.rb',
         start_line: 10,
         end_line: 20,
@@ -38,7 +38,7 @@ RSpec.describe LowType::ProxyFactory do
 
         result = described_class.return_proxy(method_node:, file:)
 
-        expect(result).to be_a(LowType::ReturnProxy)
+        expect(result).to be_a(Low::ReturnProxy)
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe LowType::ProxyFactory do
         scope: 'MyClass#my_method'
       )
 
-      expect(result).to be_a(LowType::FileProxy)
+      expect(result).to be_a(Low::FileProxy)
       expect(result.path).to eq('/path/to/file.rb')
       expect(result.start_line).to eq(5)
       expect(result.end_line).to eq(15)

@@ -19,15 +19,15 @@ end
 class Dependencies
   include LowType
 
-  def dependency(dependency: Low::Dependency)
+  def dependency(dependency: Dependency)
     dependency
   end
 
-  def symbol_dependency(dependency: Low::Dependency | :symbol)
+  def symbol_dependency(dependency: Dependency | :symbol)
     dependency
   end
 
-  def string_dependency(dependency: Low::Dependency | 'string')
+  def string_dependency(dependency: Dependency | 'string')
     dependency
   end
 end

@@ -6,7 +6,9 @@ module LowType
   module Syntax
     refine Array.singleton_class do
       def [](*expression)
-        return TypeExpression.new(type: [*expression]) if TypeQuery.type?(expression.first) || TypeQuery.typed_array?(expression:)
+        if Low::TypeQuery.type?(expression.first) || Low::TypeQuery.typed_array?(expression:)
+          return Low::TypeExpression.new(type: [*expression])
+        end
 
         super
       end
@@ -14,7 +16,7 @@ module LowType
 
     refine Hash.singleton_class do
       def [](type)
-        return TypeExpression.new(type:) if TypeQuery.type?(type)
+        return Low::TypeExpression.new(type:) if Low::TypeQuery.type?(type)
 
         super
       end

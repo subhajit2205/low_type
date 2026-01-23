@@ -5,7 +5,7 @@ require 'expressions'
 require_relative '../proxies/param_proxy'
 require_relative '../queries/type_query'
 
-module LowType
+module Low
   root_path = File.expand_path(__dir__)
   adapter_paths = Dir.chdir(root_path) { Dir.glob('adapters/*') }.map { |path| File.join(root_path, path) }
   module_paths = %w[expressions/expressions instance_types redefiner].map { |path| File.join(root_path, "#{path}.rb") }
@@ -55,7 +55,7 @@ module LowType
         if type.is_a?(Array)
           "[#{type.map { |subtype| valid_subtype(subtype:) }.join(', ')}]"
         else
-          type.inspect.to_s.delete_prefix('LowType::')
+          type.inspect.to_s.delete_prefix('Low::')
         end
       end
 
@@ -80,7 +80,7 @@ module LowType
 
     # Override Expressions as LowType supports complex types which are implemented as values.
     def value?(expression)
-      ::LowType::TypeQuery.value?(expression) || expression.nil?
+      ::Low::TypeQuery.value?(expression) || expression.nil?
     end
 
     def valid_subtype(subtype:)
@@ -89,7 +89,7 @@ module LowType
         types << 'nil' if subtype.default_value.nil?
         types.join(' | ')
       else
-        subtype.to_s.delete_prefix('LowType::')
+        subtype.to_s.delete_prefix('Low::')
       end
     end
 
@@ -133,10 +133,10 @@ module LowType
 
     def type_matches_value?(type:, value:, proxy:)
       if type.instance_of?(Class)
-        return type.match?(value:) if LowType::TypeQuery.complex_type?(expression: type)
+        return type.match?(value:) if Low::TypeQuery.complex_type?(expression: type)
 
         return type == value.class
-      elsif type.instance_of?(::LowType::TypeExpression)
+      elsif type.instance_of?(::Low::TypeExpression)
         type.validate!(value:, proxy:)
         return true
       end

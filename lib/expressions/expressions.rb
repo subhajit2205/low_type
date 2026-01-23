@@ -5,7 +5,7 @@ require_relative '../proxies/file_proxy'
 require_relative '../proxies/local_proxy'
 require_relative '../types/error_types'
 
-module LowType
+module Low
   module Expressions
     def type(type_expression)
       value = type_expression.default_value

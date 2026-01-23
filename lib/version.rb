@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module LowType
-  VERSION = '1.1.7'
+module Low
+  TYPE_VERSION = '1.1.7'
 end

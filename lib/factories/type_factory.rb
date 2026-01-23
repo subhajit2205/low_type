@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LowType
+module Low
   class TypeFactory
     class << self
       def complex_type(parent_type)
