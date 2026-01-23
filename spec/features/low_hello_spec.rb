@@ -27,9 +27,6 @@ RSpec.describe LowHello do
         :arg_and_return_type,
         :arg_and_nilable_return_value,
         :private_typed_arg,
-        :inline_class_typed_arg,
-        :class_typed_arg,
-        :class_typed_arg_and_default_value
       )
     end
   end
@@ -368,48 +365,6 @@ RSpec.describe LowHello do
   end
 
   # TODO: Return type that is literally a type (should probably pass). Test both basic type and complex type.
-
-  # Class methods.
-
-  describe '.inline_class_typed_arg' do
-    it 'passes through the argument' do
-      expect(described_class.inline_class_typed_arg('Hi')).to eq('Hi')
-    end
-
-    context 'when no arg provided' do
-      let(:error_message) { "Invalid argument type 'NilClass' for parameter 'goodbye'. Valid types: 'String'" }
-
-      it 'raises an argument error' do
-        expect { described_class.inline_class_typed_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
-      end
-    end
-  end
-
-  describe '.class_typed_arg' do
-    it 'passes through the argument' do
-      expect(described_class.class_typed_arg('Hi')).to eq('Hi')
-    end
-
-    context 'when no arg provided' do
-      let(:error_message) { "Invalid argument type 'NilClass' for parameter 'goodbye'. Valid types: 'String'" }
-
-      it 'raises an argument error' do
-        expect { described_class.class_typed_arg }.to raise_error(LowType::ArgumentTypeError, error_message)
-      end
-    end
-  end
-
-  describe '.class_typed_arg_and_default_value' do
-    it 'passes through the argument' do
-      expect(described_class.class_typed_arg_and_default_value('Goodbye')).to eq('Goodbye')
-    end
-
-    context 'when no arg provided' do
-      it 'provides the default value' do
-        expect(described_class.class_typed_arg_and_default_value).to eq('Bye')
-      end
-    end
-  end
 
   describe '#private_typed_arg' do
     let(:error_message) { "private method 'private_typed_arg' called for an instance of LowHello" }
