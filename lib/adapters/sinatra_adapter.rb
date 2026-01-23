@@ -31,7 +31,7 @@ module LowType
           next unless (return_proxy = return_proxy(method_node: method_call, pattern:, file:))
 
           route = "#{method_call.name.upcase} #{pattern}"
-          params = [ParamProxy.new(type_expression: nil, name: :route, type: :req, position: 0, file:)]
+          params = [ParamProxy.new(expression: nil, name: :route, type: :req, position: 0, file:)]
           @klass.low_methods[route] = MethodProxy.new(name: method_call.name, params:, return_proxy:)
         end
       end

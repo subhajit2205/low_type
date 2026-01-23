@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'expressions'
+
 require_relative '../expressions/expressions'
 require_relative '../expressions/type_expression'
 require_relative '../proxies/file_proxy'
@@ -22,25 +24,24 @@ module LowType
         FileProxy.new(path:, start_line:, end_line:, scope:)
       end
 
+      # The evals below aren't a security risk because the code comes from a trusted source; the file itself that did the include.
       def param_proxies(method_node:, file:)
         return [] if method_node.parameters.nil?
 
         params_without_block = method_node.parameters.slice.delete_suffix(', &block')
 
-        # Not a security risk because the code comes from a trusted source; the file that did the include. Does the file trust itself?
         ruby_method = eval("-> (#{params_without_block}) {}", binding, __FILE__, __LINE__) # rubocop:disable Security/Eval
 
-        # Not a security risk because the code comes from a trusted source; the file that did the include. Does the file trust itself?
-        # Local variable names are prefixed with __lt or __rb where necessary to avoid being overridden by method parameters.
+        # Local variable names are prefixed with __lt or __rb where needed to avoid being overridden by method parameters.
         typed_method = <<~RUBY
           -> (#{params_without_block}, __rb_method:, __lt_file:) {
-            param_proxies_for_type_expressions(ruby_method: __rb_method, file: __lt_file, method_binding: binding)
+            param_proxies_for_expressions(ruby_method: __rb_method, file: __lt_file, method_binding: binding)
           }
         RUBY
 
-        # Called with only required args (as nil) and optional args omitted, to evaluate type expressions (from default values).
-        # Passes internal variables with namespaced names to avoid conflicts with the method parameters.
         required_args, required_kwargs = required_args(ruby_method:)
+
+        # Called with only required args (as nil) and optional args omitted, to evaluate expressions stored as default values.
         eval(typed_method, binding, __FILE__, __LINE__) # rubocop:disable Security/Eval
           .call(*required_args, **required_kwargs, __rb_method: ruby_method, __lt_file: file)
 
@@ -85,22 +86,26 @@ module LowType
         [required_args, required_kwargs]
       end
 
-      def param_proxies_for_type_expressions(ruby_method:, file:, method_binding:)
+      def param_proxies_for_expressions(ruby_method:, file:, method_binding:)
         param_proxies = []
 
         ruby_method.parameters.each_with_index do |param, position|
           type, name = param
-          position = nil unless %i[opt req rest].include?(type)
-          expression = method_binding.local_variable_get(name)
 
-          type_expression = nil
-          if expression.is_a?(TypeExpression)
-            type_expression = expression
-          elsif ::LowType::TypeQuery.type?(expression)
-            type_expression = TypeExpression.new(type: expression)
+          # We don't support splatted *positional and **keyword arguments as by definition they are untyped.
+          next if type == :rest
+
+          position = nil unless %i[opt req].include?(type)
+          local_variable = method_binding.local_variable_get(name)
+
+          expression = nil
+          if local_variable.is_a?(::Expressions::Expression)
+            expression = local_variable
+          elsif ::LowType::TypeQuery.type?(local_variable)
+            expression = TypeExpression.new(type: local_variable)
           end
 
-          param_proxies << ParamProxy.new(type_expression:, name:, type:, position:, file:) if type_expression
+          param_proxies << ParamProxy.new(expression:, name:, type:, position:, file:) if expression
         end
 
         param_proxies

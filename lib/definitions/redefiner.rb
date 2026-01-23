@@ -31,7 +31,7 @@ module LowType
           next unless value.nil?
           raise param_proxy.error_type, param_proxy.error_message(value:) if param_proxy.required?
 
-          value = param_proxy.type_expression.default_value # Default value can still be `nil`.
+          value = param_proxy.expression.default_value # Default value can still be `nil`.
           value = value.value if value.is_a?(ValueExpression)
           param_proxy.position ? args[param_proxy.position] = value : kwargs[param_proxy.name] = value
         end
@@ -72,9 +72,9 @@ module LowType
 
               method_proxy.params.each do |param_proxy|
                 value = param_proxy.position ? args[param_proxy.position] : kwargs[param_proxy.name]
-                value = param_proxy.type_expression.default_value if value.nil? && !param_proxy.required?
+                value = param_proxy.expression.default_value if value.nil? && !param_proxy.required?
 
-                param_proxy.type_expression.validate!(value:, proxy: param_proxy)
+                param_proxy.expression.validate!(value:, proxy: param_proxy)
                 value = value.value if value.is_a?(ValueExpression)
                 param_proxy.position ? args[param_proxy.position] = value : kwargs[param_proxy.name] = value
               end
