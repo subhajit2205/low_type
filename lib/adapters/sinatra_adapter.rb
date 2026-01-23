@@ -7,7 +7,7 @@ require_relative '../interfaces/adapter_interface'
 require_relative '../proxies/return_proxy'
 require_relative '../types/error_types'
 
-module LowType
+module Low
   module Adapter
     # We don't use https://sinatrarb.com/extensions.html because we need to type check all Ruby methods (not just Sinatra) at a lower level.
     class Sinatra < AdapterInterface
@@ -31,7 +31,7 @@ module LowType
           next unless (return_proxy = return_proxy(method_node: method_call, pattern:, file:))
 
           route = "#{method_call.name.upcase} #{pattern}"
-          params = [ParamProxy.new(type_expression: nil, name: :route, type: :req, position: 0, file:)]
+          params = [ParamProxy.new(expression: nil, name: :route, type: :req, position: 0, file:)]
           @klass.low_methods[route] = MethodProxy.new(name: method_call.name, params:, return_proxy:)
         end
       end

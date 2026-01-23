@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LowType
+module Low
   class ArgumentTypeError < TypeError; end
   class LocalTypeError < TypeError; end
   class ReturnTypeError < TypeError; end

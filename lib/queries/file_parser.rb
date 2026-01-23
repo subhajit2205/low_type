@@ -3,7 +3,7 @@
 require 'prism'
 require_relative '../proxies/class_proxy'
 
-module LowType
+module Low
   class FileParser
     attr_reader :parent_map, :instance_methods, :class_methods, :class_proxy
 

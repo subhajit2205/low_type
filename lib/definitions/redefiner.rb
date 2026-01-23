@@ -6,7 +6,7 @@ require_relative '../proxies/method_proxy'
 require_relative '../queries/type_query'
 require_relative 'repository'
 
-module LowType
+module Low
   # Redefine methods to have their arguments and return values type checked.
   class Redefiner
     class << self
@@ -21,20 +21,7 @@ module LowType
       end
 
       def redefinable?(method_proxy:, class_proxy:)
-        # Method has no types.
-        if method_proxy.params == [] && method_proxy.return_proxy.nil?
-          LowType::Repository.delete(name: method_proxy.name, klass: class_proxy.klass)
-          return false
-        end
-
-        # Method outside class bounds.
-        within_bounds = method_proxy.start_line > class_proxy.start_line && method_proxy.end_line <= class_proxy.end_line
-        if method_proxy.lines? && class_proxy.lines? && !within_bounds
-          LowType::Repository.delete(name: method_proxy.name, klass: class_proxy.klass)
-          return false
-        end
-
-        true
+        method_has_types?(method_proxy:, class_proxy:) && method_within_class_bounds?(method_proxy:, class_proxy:)
       end
 
       def untyped_args(args:, kwargs:, method_proxy:) # rubocop:disable Metrics/AbcSize
@@ -44,7 +31,7 @@ module LowType
           next unless value.nil?
           raise param_proxy.error_type, param_proxy.error_message(value:) if param_proxy.required?
 
-          value = param_proxy.type_expression.default_value # Default value can still be `nil`.
+          value = param_proxy.expression.default_value # Default value can still be `nil`.
           value = value.value if value.is_a?(ValueExpression)
           param_proxy.position ? args[param_proxy.position] = value : kwargs[param_proxy.name] = value
         end
@@ -76,7 +63,7 @@ module LowType
       def typed_methods(method_proxies:, class_proxy:) # rubocop:disable Metrics
         Module.new do
           method_proxies.each do |name, method_proxy|
-            next unless LowType::Redefiner.redefinable?(method_proxy:, class_proxy:)
+            next unless Low::Redefiner.redefinable?(method_proxy:, class_proxy:)
 
             # You are now in the binding of the includer class (`name` is also available here).
             define_method(name) do |*args, **kwargs|
@@ -85,9 +72,9 @@ module LowType
 
               method_proxy.params.each do |param_proxy|
                 value = param_proxy.position ? args[param_proxy.position] : kwargs[param_proxy.name]
-                value = param_proxy.type_expression.default_value if value.nil? && !param_proxy.required?
+                value = param_proxy.expression.default_value if value.nil? && !param_proxy.required?
 
-                param_proxy.type_expression.validate!(value:, proxy: param_proxy)
+                param_proxy.expression.validate!(value:, proxy: param_proxy)
                 value = value.value if value.is_a?(ValueExpression)
                 param_proxy.position ? args[param_proxy.position] = value : kwargs[param_proxy.name] = value
               end
@@ -109,19 +96,38 @@ module LowType
       def untyped_methods(method_proxies:, class_proxy:)
         Module.new do
           method_proxies.each do |name, method_proxy|
-            next unless LowType::Redefiner.redefinable?(method_proxy:, class_proxy:)
+            next unless Low::Redefiner.redefinable?(method_proxy:, class_proxy:)
 
             # You are now in the binding of the includer class (`name` is also available here).
             define_method(name) do |*args, **kwargs|
               # NOTE: Type checking is currently disabled. See 'config.type_checking'.
               method_proxy = instance_of?(Class) ? low_methods[name] : self.class.low_methods[name] || Object.low_methods[name]
-              args, kwargs = LowType::Redefiner.untyped_args(args:, kwargs:, method_proxy:)
+              args, kwargs = Low::Redefiner.untyped_args(args:, kwargs:, method_proxy:)
               super(*args, **kwargs)
             end
 
             private name if class_proxy.private_start_line && method_proxy.start_line > class_proxy.private_start_line
           end
         end
+      end
+
+      def method_has_types?(method_proxy:, class_proxy:)
+        if method_proxy.params == [] && method_proxy.return_proxy.nil?
+          Low::Repository.delete(name: method_proxy.name, klass: class_proxy.klass)
+          return false
+        end
+
+        true
+      end
+
+      def method_within_class_bounds?(method_proxy:, class_proxy:)
+        within_bounds = method_proxy.start_line > class_proxy.start_line && method_proxy.end_line <= class_proxy.end_line
+        if method_proxy.lines? && class_proxy.lines? && !within_bounds
+          Low::Repository.delete(name: method_proxy.name, klass: class_proxy.klass)
+          return false
+        end
+
+        true
       end
     end
   end

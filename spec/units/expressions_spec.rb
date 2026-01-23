@@ -46,7 +46,7 @@ RSpec.describe 'Expressions' do
       let(:error_message) { /Invalid variable type Array in 'LowLocal:\d+'. Valid types: '\[Integer\]'/ }
 
       it 'raises an argument type error' do
-        expect { subject.invalid_subtype_array }.to raise_error(LowType::LocalTypeError, error_message)
+        expect { subject.invalid_subtype_array }.to raise_error(Low::LocalTypeError, error_message)
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe 'Expressions' do
       let(:error_message) { "Invalid type expression, likely because you didn't add 'using LowType::Syntax'" }
 
       it 'raises a config error' do
-        expect { subject.subtype_array }.to raise_error(LowType::ConfigError, error_message)
+        expect { subject.subtype_array }.to raise_error(Low::ConfigError, error_message)
       end
     end
   end
@@ -72,7 +72,7 @@ RSpec.describe 'Expressions' do
       end
 
       it 'raises an argument type error' do
-        expect { subject.invalid_array_multiple_subtypes }.to raise_error(LowType::LocalTypeError, error_message)
+        expect { subject.invalid_array_multiple_subtypes }.to raise_error(Low::LocalTypeError, error_message)
       end
     end
   end

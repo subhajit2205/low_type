@@ -4,11 +4,11 @@ require_relative '../../lib/expressions/type_expression'
 require_relative '../../lib/proxies/param_proxy'
 require_relative '../../lib/types/error_types'
 
-RSpec.describe LowType::ParamProxy do
-  subject(:param_proxy) { described_class.new(type_expression:, name: :dummy_method, type: :req, file:, position: nil) }
+RSpec.describe Low::ParamProxy do
+  subject(:param_proxy) { described_class.new(expression:, name: :dummy_method, type: :req, file:, position: nil) }
 
-  let(:type_expression) { LowType::TypeExpression.new(default_value: nil) }
-  let(:file) { LowType::FileProxy.new(path: '/Users/name/dev/app/lib/my_class', start_line: 123, scope: 'MyClass#my_method') }
+  let(:expression) { Low::TypeExpression.new(default_value: nil) }
+  let(:file) { Low::FileProxy.new(path: '/Users/name/dev/app/lib/my_class', start_line: 123, scope: 'MyClass#my_method') }
 
   describe '#initialize' do
     it 'instantiates a class' do

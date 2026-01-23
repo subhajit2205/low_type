@@ -20,25 +20,32 @@ module LowType
       end
     end
 
-    file_path = FileQuery.file_path(klass:)
+    file_path = Low::FileQuery.file_path(klass:)
     return unless File.exist?(file_path)
 
-    parser = FileParser.new(klass:, file_path:)
+    parser = Low::FileParser.new(klass:, file_path:)
 
-    klass.extend TypeAccessors
-    klass.include Expressions
-    klass.prepend Redefiner.redefine(method_nodes: parser.instance_methods, class_proxy: parser.class_proxy, file_path:)
-    klass.singleton_class.prepend Redefiner.redefine(method_nodes: parser.class_methods, class_proxy: parser.class_proxy, file_path:)
+    klass.extend Low::TypeAccessors
+    klass.include Low::Expressions
+    klass.prepend Low::Redefiner.redefine(method_nodes: parser.instance_methods, class_proxy: parser.class_proxy, file_path:)
+    klass.singleton_class.prepend Low::Redefiner.redefine(method_nodes: parser.class_methods, class_proxy: parser.class_proxy, file_path:)
 
-    if (adapter = Adapter::Loader.load(klass:, parser:, file_path:))
+    if (adapter = Low::Adapter::Loader.load(klass:, parser:, file_path:))
       adapter.process
-      klass.prepend Adapter::Methods
+      klass.prepend Low::Adapter::Methods
     end
   end
 
   class << self
     def config
-      config = Struct.new(:type_checking, :error_mode, :output_mode, :output_size, :deep_type_check, :union_type_expressions)
+      config = Struct.new(
+        :type_checking,
+        :error_mode,
+        :output_mode,
+        :output_size,
+        :deep_type_check,
+        :union_type_expressions
+      )
       @config ||= config.new(true, :error, :type, 100, false, true)
     end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LowType
+module Low
   class Repository
     class << self
       def all(klass:)

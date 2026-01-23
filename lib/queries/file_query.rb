@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LowType
+module Low
   class FileQuery
     class << self
       def file_path(klass:)

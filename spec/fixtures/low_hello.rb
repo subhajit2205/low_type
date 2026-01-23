@@ -34,7 +34,7 @@ class LowHello
   end
 
   def typed_arg_and_invalid_default_typed_value(greeting = String | Array[Symbol] | value(Integer))
-    # => raises TypeError. A default value(type) that is not nil still has to be a valid type.
+    # => raises TypeError... a default value(T) that is not nil still has to be a valid type.
     greeting
   end
 
@@ -68,41 +68,6 @@ class LowHello
 
   def typed_array_arg_and_default_value(greetings = Array[String] | %w[Hi Hey Howdy])
     greetings
-  end
-
-  # Return types.
-
-  def return_type() -> { Integer }
-    2 + 2
-  end
-
-  def array_return_type() -> { Array[Symbol] }
-    %i[one two three]
-  end
-
-  def arg_and_return_type(greeting) -> { String }
-    2 + 2
-    greeting
-  end
-
-  def arg_and_nilable_return_value(greeting) -> { String | nil }
-    greeting
-  end
-
-  # Class methods.
-
-  def self.inline_class_typed_arg(goodbye = String)
-    goodbye
-  end
-
-  class << self
-    def class_typed_arg(goodbye = String)
-      goodbye
-    end
-
-    def class_typed_arg_and_default_value(goodbye = String | 'Bye')
-      goodbye
-    end
   end
 
   private

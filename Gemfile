@@ -6,6 +6,9 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'expressions', path: '../expressions'
+  gem 'low_dependency', path: '../low_dependency'
+
   gem 'pry'
   gem 'pry-nav'
   gem 'rack'

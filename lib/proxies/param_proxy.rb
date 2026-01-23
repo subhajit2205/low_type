@@ -3,14 +3,14 @@
 require_relative '../interfaces/error_interface'
 require_relative '../types/error_types'
 
-module LowType
+module Low
   class ParamProxy < ErrorInterface
-    attr_reader :type_expression, :name, :type, :position
+    attr_reader :expression, :name, :type, :position
 
-    def initialize(type_expression:, name:, type:, file:, position: nil)
+    def initialize(expression:, name:, type:, file:, position: nil)
       super()
 
-      @type_expression = type_expression
+      @expression = expression
       @name = name
       @type = type
       @position = position
@@ -18,7 +18,7 @@ module LowType
     end
 
     def required?
-      @type_expression.default_value == :LOW_TYPE_UNDEFINED
+      @expression.required?
     end
 
     def error_type
@@ -26,7 +26,7 @@ module LowType
     end
 
     def error_message(value:)
-      "Invalid argument type '#{output(value:)}' for parameter '#{@name}'. Valid types: '#{@type_expression.valid_types}'"
+      "Invalid argument type '#{output(value:)}' for parameter '#{@name}'. Valid types: '#{@expression.valid_types}'"
     end
   end
 end

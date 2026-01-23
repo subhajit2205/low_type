@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'expressions'
+
 require_relative '../proxies/param_proxy'
 require_relative '../queries/type_query'
 
-module LowType
+module Low
   root_path = File.expand_path(__dir__)
   adapter_paths = Dir.chdir(root_path) { Dir.glob('adapters/*') }.map { |path| File.join(root_path, path) }
   module_paths = %w[expressions/expressions instance_types redefiner].map { |path| File.join(root_path, "#{path}.rb") }
@@ -11,7 +13,7 @@ module LowType
   HIDDEN_PATHS = [File.expand_path(__FILE__), *adapter_paths, *module_paths].freeze
 
   # Represent types and default values as a series of chainable expressions.
-  class TypeExpression
+  class TypeExpression < ::Expressions::Expression
     attr_reader :types, :default_value
 
     # @param type - A literal type or an instance representation of a typed structure.
@@ -21,19 +23,6 @@ module LowType
       @default_value = default_value
       # TODO: Override per type expression with a config expression.
       @deep_type_check = LowType.config.deep_type_check
-    end
-
-    def |(expression)
-      if expression.instance_of?(::LowType::TypeExpression)
-        @types += expression.types
-        @default_value = expression.default_value
-      elsif ::LowType::TypeQuery.value?(expression)
-        @default_value = expression
-      else
-        @types << expression
-      end
-
-      self
     end
 
     def required?
@@ -62,7 +51,7 @@ module LowType
         if type.is_a?(Array)
           "[#{type.map { |subtype| valid_subtype(subtype:) }.join(', ')}]"
         else
-          type.inspect.to_s.delete_prefix('LowType::')
+          type.inspect.to_s.delete_prefix('Low::')
         end
       end
 
@@ -72,13 +61,31 @@ module LowType
 
     private
 
+    def union_expression(expression)
+      @types += expression.types
+      @default_value = expression.default_value
+    end
+
+    def union_type(type)
+      @types << type
+    end
+
+    def union_value(value)
+      @default_value = value
+    end
+
+    # Override Expressions as LowType supports complex types which are implemented as values.
+    def value?(expression)
+      ::Low::TypeQuery.value?(expression) || expression.nil?
+    end
+
     def valid_subtype(subtype:)
       if subtype.is_a?(TypeExpression)
         types = subtype.types
         types << 'nil' if subtype.default_value.nil?
         types.join(' | ')
       else
-        subtype.to_s.delete_prefix('LowType::')
+        subtype.to_s.delete_prefix('Low::')
       end
     end
 
@@ -122,10 +129,10 @@ module LowType
 
     def type_matches_value?(type:, value:, proxy:)
       if type.instance_of?(Class)
-        return type.match?(value:) if LowType::TypeQuery.complex_type?(expression: type)
+        return type.match?(value:) if Low::TypeQuery.complex_type?(expression: type)
 
         return type == value.class
-      elsif type.instance_of?(::LowType::TypeExpression)
+      elsif type.instance_of?(::Low::TypeExpression)
         type.validate!(value:, proxy:)
         return true
       end

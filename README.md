@@ -178,8 +178,8 @@ def my_method(my_arg: String | MyType | value(MyType)) # => MyType is the defaul
 LowType evaluates type expressions on *class load* (just once) to be efficient and thread-safe. Then the defined types are checked per method call.  
 However, `type()` type expressions are evaluated when they are called at *runtime* on an instance, and this may impact performance.
 
-|                         | **Evaluation** | **Validation** | ℹ️ *Example*            |
-|-------------------------|----------------|----------------|-------------------------|
+|                         | **Evaluation**  | **Validation** | ℹ️ *Example*            |
+|-------------------------|-----------------|----------------|-------------------------|
 | **Method param types**  | 🟢 Class load   | 🟠 Runtime     | `def method(name: T)`   |
 | **Method return types** | 🟢 Class load   | 🟠 Runtime     | `def method() -> { T }` |
 | **Instance types**      | 🟢 Class load   | 🟠 Runtime     | `type_accessor(name: T)`|
@@ -276,9 +276,18 @@ class MyApp < Sinatra::Base
 end
 ```
 
-<!--### Rails [UNRELEASED]
+### LowDependency
 
-If you still want to access Rails' `HTML` sanitizer class while in the scope of the `LowType` module, then use their full namespace `Rails::HTML`.-->
+With [LowDependency](https://github.com/low-rb/low_dependency) you can inject your dependencies automatically via the constructor:
+```ruby
+class MyClass
+  include LowType
+
+  def initialize(my_dependency: Dependency)
+    @my_dependency = my_dependency # => The dependency is injected.
+  end
+end
+```
 
 ### Rubocop
 
