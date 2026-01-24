@@ -3,6 +3,9 @@
 require 'pry'
 require 'pry-nav'
 require_relative '../../lib/low_type'
+require_relative '../../lib/types/complex_types'
+
+include Low::Types
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

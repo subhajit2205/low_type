@@ -51,7 +51,7 @@ module Low
         if type.is_a?(Array)
           "[#{type.map { |subtype| valid_subtype(subtype:) }.join(', ')}]"
         else
-          type.inspect.to_s.delete_prefix('Low::')
+          type.inspect.to_s.delete_prefix('Low::Types::')
         end
       end
 
@@ -85,7 +85,7 @@ module Low
         types << 'nil' if subtype.default_value.nil?
         types.join(' | ')
       else
-        subtype.to_s.delete_prefix('Low::')
+        subtype.to_s.delete_prefix('Low::Types::')
       end
     end
 

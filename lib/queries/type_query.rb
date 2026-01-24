@@ -19,7 +19,7 @@ module Low
       end
 
       def complex_type?(expression:)
-        Low::COMPLEX_TYPES.include?(expression) || typed_array?(expression:) || typed_hash?(expression:)
+        Low::Types::COMPLEX_TYPES.include?(expression) || typed_array?(expression:) || typed_hash?(expression:)
       end
 
       private

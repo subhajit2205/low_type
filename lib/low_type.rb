@@ -26,6 +26,7 @@ module LowType
     parser = Low::FileParser.new(klass:, file_path:)
 
     klass.extend Low::TypeAccessors
+    klass.include Low::Types
     klass.include Low::Expressions
     klass.prepend Low::Redefiner.redefine(method_nodes: parser.instance_methods, class_proxy: parser.class_proxy, file_path:)
     klass.singleton_class.prepend Low::Redefiner.redefine(method_nodes: parser.class_methods, class_proxy: parser.class_proxy, file_path:)

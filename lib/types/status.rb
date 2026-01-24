@@ -4,48 +4,50 @@ require_relative 'complex_type'
 require_relative 'error_types'
 
 module Low
-  # Status is an Integer for type checking, but an instance of StatusCode for advanced functionality.
-  class Status < Integer
-    extend ComplexType
+  module Types
+    # Status is an Integer for type checking, but an instance of StatusCode for advanced functionality.
+    class Status < Integer
+      extend ComplexType
 
-    class StatusCode
-      attr_reader :status_code
+      class StatusCode
+        attr_reader :status_code
 
-      STATUS_CODES = [
-        # Info.
-        100, 101, 102, 103,
-        # Success.
-        200, 201, 202, 203, 204, 205, 206, 207, 208, 226,
-        # Redirect.
-        300, 301, 302, 303, 304, 305, 306, 307, 308,
-        # Client Error.
-        400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414,
-        415, 416, 417, 418, 421, 422, 423, 424, 425, 426, 428, 429, 431, 451,
-        # Server Error.
-        500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511
-      ].freeze
+        STATUS_CODES = [
+          # Info.
+          100, 101, 102, 103,
+          # Success.
+          200, 201, 202, 203, 204, 205, 206, 207, 208, 226,
+          # Redirect.
+          300, 301, 302, 303, 304, 305, 306, 307, 308,
+          # Client Error.
+          400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414,
+          415, 416, 417, 418, 421, 422, 423, 424, 425, 426, 428, 429, 431, 451,
+          # Server Error.
+          500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511
+        ].freeze
 
-      def initialize(status_code)
-        raise AllowedTypeError unless STATUS_CODES.include?(status_code)
+        def initialize(status_code)
+          raise AllowedTypeError unless STATUS_CODES.include?(status_code)
 
-        @status_code = status_code
+          @status_code = status_code
+        end
+
+        def ==(other)
+          other.class == self.class && other.status_code == @status_code
+        end
+
+        def eql?(other)
+          self == other
+        end
+
+        def hash
+          [self.class, @status_code].hash
+        end
       end
 
-      def ==(other)
-        other.class == self.class && other.status_code == @status_code
+      def self.[](status_code)
+        @status_code = StatusCode.new(status_code)
       end
-
-      def eql?(other)
-        self == other
-      end
-
-      def hash
-        [self.class, @status_code].hash
-      end
-    end
-
-    def self.[](status_code)
-      @status_code = StatusCode.new(status_code)
     end
   end
 end

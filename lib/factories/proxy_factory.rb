@@ -9,13 +9,16 @@ require_relative '../proxies/param_proxy'
 require_relative '../proxies/return_proxy'
 require_relative '../queries/file_parser'
 require_relative '../syntax/syntax'
+require_relative '../types/complex_types'
+require_relative '../types/status'
 
 module Low
   class ProxyFactory
     using ::LowType::Syntax
 
     class << self
-      include Expressions
+      include Low::Expressions
+      include Low::Types
 
       def file_proxy(node:, path:, scope:)
         start_line = node.respond_to?(:start_line) ? node.start_line : nil
