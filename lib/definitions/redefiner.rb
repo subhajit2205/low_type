@@ -10,18 +10,18 @@ module Low
   # Redefine methods to have their arguments and return values type checked.
   class Redefiner
     class << self
-      def redefine(method_nodes:, class_proxy:, file_path:)
-        method_proxies = build_methods(method_nodes:, klass: class_proxy.klass, file_path:)
+      def redefine(method_nodes:, class_proxy:, klass:, file_path:)
+        method_proxies = build_methods(method_nodes:, klass:, file_path:)
 
         if LowType.config.type_checking
-          typed_methods(method_proxies:, class_proxy:)
+          typed_methods(method_proxies:, class_proxy:, klass:)
         else
-          untyped_methods(method_proxies:, class_proxy:)
+          untyped_methods(method_proxies:, class_proxy:, klass:)
         end
       end
 
-      def redefinable?(method_proxy:, class_proxy:)
-        method_has_types?(method_proxy:, class_proxy:) && method_within_class_bounds?(method_proxy:, class_proxy:)
+      def redefinable?(method_proxy:, class_proxy:, klass:)
+        method_has_types?(method_proxy:, class_proxy:, klass:) && method_within_class_bounds?(method_proxy:, class_proxy:, klass:)
       end
 
       def untyped_args(args:, kwargs:, method_proxy:) # rubocop:disable Metrics/AbcSize
@@ -60,10 +60,10 @@ module Low
         Repository.all(klass:)
       end
 
-      def typed_methods(method_proxies:, class_proxy:) # rubocop:disable Metrics
+      def typed_methods(method_proxies:, class_proxy:, klass:) # rubocop:disable Metrics
         Module.new do
           method_proxies.each do |name, method_proxy|
-            next unless Low::Redefiner.redefinable?(method_proxy:, class_proxy:)
+            next unless Low::Redefiner.redefinable?(method_proxy:, class_proxy:, klass:)
 
             # You are now in the binding of the includer class (`name` is also available here).
             define_method(name) do |*args, **kwargs|
@@ -93,10 +93,10 @@ module Low
         end
       end
 
-      def untyped_methods(method_proxies:, class_proxy:)
+      def untyped_methods(method_proxies:, class_proxy:, klass:)
         Module.new do
           method_proxies.each do |name, method_proxy|
-            next unless Low::Redefiner.redefinable?(method_proxy:, class_proxy:)
+            next unless Low::Redefiner.redefinable?(method_proxy:, class_proxy:, klass:)
 
             # You are now in the binding of the includer class (`name` is also available here).
             define_method(name) do |*args, **kwargs|
@@ -111,19 +111,19 @@ module Low
         end
       end
 
-      def method_has_types?(method_proxy:, class_proxy:)
+      def method_has_types?(method_proxy:, class_proxy:, klass:)
         if method_proxy.params == [] && method_proxy.return_proxy.nil?
-          Low::Repository.delete(name: method_proxy.name, klass: class_proxy.klass)
+          Low::Repository.delete(name: method_proxy.name, klass:)
           return false
         end
 
         true
       end
 
-      def method_within_class_bounds?(method_proxy:, class_proxy:)
+      def method_within_class_bounds?(method_proxy:, class_proxy:, klass:)
         within_bounds = method_proxy.start_line > class_proxy.start_line && method_proxy.end_line <= class_proxy.end_line
         if method_proxy.lines? && class_proxy.lines? && !within_bounds
-          Low::Repository.delete(name: method_proxy.name, klass: class_proxy.klass)
+          Low::Repository.delete(name: method_proxy.name, klass:)
           return false
         end
 
