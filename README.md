@@ -194,7 +194,7 @@ LowType only affects the class that it's `include`d into. Class methods `Array[]
 Copy and paste the following and change the defaults to configure LowType:
 
 ```ruby
-# Call before the class that includes LowType is required.
+# This configuration should be set before the class that includes LowType is required.
 LowType.configure do |config|
   # Set to "false" to disable type checking, which you may like to do in a production environment for example.
   # There will still be a shim method to convert typed args to untyped args but performance will be near 100%.
@@ -230,7 +230,7 @@ end
 - `Hash`
 - `nil` represents an optional value
 
-ℹ️ **Note:** Any class/type that's available to Ruby is available to LowType, you just might need to `require` it.
+ℹ️ **Note:** Any class/type that's available to Ruby is available to LowType, `require` it and specify its full namespace.
 
 ### Complex types
 
