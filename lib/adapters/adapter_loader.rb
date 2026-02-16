@@ -6,11 +6,11 @@ module Low
   module Adapter
     class Loader
       class << self
-        def load(klass:, parser:, file_path:)
+        def load(klass:, class_proxy:)
           adaptor = nil
 
           ancestors = klass.ancestors.map(&:to_s)
-          adaptor = Sinatra.new(klass:, parser:, file_path:) if ancestors.include?('Sinatra::Base')
+          adaptor = Sinatra.new(klass:, class_proxy:) if ancestors.include?('Sinatra::Base')
 
           return if adaptor.nil?
 

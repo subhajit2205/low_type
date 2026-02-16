@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'expressions'
+require 'lowkey'
 
 require_relative '../expressions/expressions'
 require_relative '../expressions/type_expression'
@@ -53,8 +54,8 @@ module Low
         raise ArgumentError, "Incorrect param syntax: #{e.message}"
       end
 
-      def return_proxy(method_node:, file:)
-        return_type = FileParser.return_type(method_node:)
+      def return_proxy(method_node:, name:, file_path:, start_line:, scope:)
+        return_type = Lowkey::ClassProxy.return_type(method_node:)
         return nil if return_type.nil?
 
         begin

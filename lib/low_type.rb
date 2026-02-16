@@ -25,15 +25,15 @@ module LowType
     file_path = Low::FileQuery.file_path(klass:)
     return unless File.exist?(file_path)
 
-    parser = Low::FileParser.new(klass:, file_path:)
+    file_proxy = Lowkey.load(file_path:)
 
     klass.extend Low::TypeAccessors
     klass.include Low::Types
     klass.include Low::Expressions
-    klass.prepend Low::Redefiner.redefine(method_nodes: parser.instance_methods, class_proxy: parser.class_proxy, file_path:)
-    klass.singleton_class.prepend Low::Redefiner.redefine(method_nodes: parser.class_methods, class_proxy: parser.class_proxy, file_path:)
+    klass.prepend Low::Redefiner.redefine(method_nodes: file_proxy.instance_methods, class_proxy: file_proxy.class_proxy, klass:, file_path:)
+    klass.singleton_class.prepend Low::Redefiner.redefine(method_nodes: file_proxy.class_methods, class_proxy: file_proxy.class_proxy, file_path:)
 
-    if (adapter = Low::Adapter::Loader.load(klass:, parser:, file_path:))
+    if (adapter = Low::Adapter::Loader.load(klass:, file_proxy:, file_path:))
       adapter.process
       klass.prepend Low::Adapter::Methods
     end

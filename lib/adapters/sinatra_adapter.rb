@@ -11,9 +11,9 @@ module Low
   module Adapter
     # We don't use https://sinatrarb.com/extensions.html because we need to type check all Ruby methods (not just Sinatra) at a lower level.
     class Sinatra < AdapterInterface
-      def initialize(klass:, parser:, file_path:)
+      def initialize(klass:, class_proxy:)
         @klass = klass
-        @parser = parser
+        @class_proxy = class_proxy
         @file_path = file_path
       end
 
@@ -36,17 +36,6 @@ module Low
           params = [ParamProxy.new(expression: nil, name: :route, type: :req, position: 0, file_path:)]
           @klass.low_methods[route] = MethodProxy.new(name: method_call.name, params:, return_proxy:)
         end
-      end
-
-      def return_proxy(method_node:, pattern:, file:)
-        return_type = FileParser.return_type(method_node:)
-        return nil if return_type.nil?
-
-        # Not a security risk because the code comes from a trusted source; the file that did the include. Does the file trust itself?
-        expression = eval(return_type.slice).call # rubocop:disable Security/Eval
-        expression = TypeExpression.new(type: expression) unless expression.is_a?(TypeExpression)
-
-        ReturnProxy.new(type_expression: expression, name: "#{method_node.name.upcase} #{pattern}", file:)
       end
     end
 
