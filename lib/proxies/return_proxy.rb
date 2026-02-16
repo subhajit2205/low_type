@@ -7,12 +7,11 @@ module Low
   class ReturnProxy < ErrorInterface
     attr_reader :type_expression, :name
 
-    def initialize(type_expression:, name:, file:)
-      super()
+    def initialize(type_expression:, name:, file_path:, start_line:, scope:)
+      super(file_path:, start_line:, scope:)
 
       @type_expression = type_expression
       @name = name
-      @file = file
     end
 
     def error_type

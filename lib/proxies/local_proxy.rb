@@ -7,12 +7,11 @@ module Low
   class LocalProxy < ErrorInterface
     attr_reader :type_expression, :name
 
-    def initialize(type_expression:, name:, file:)
-      super()
+    def initialize(type_expression:, name:, file_path:, start_line:, scope:)
+      super(file_path:, start_line:, scope:)
 
       @type_expression = type_expression
       @name = name
-      @file = file
     end
 
     def error_type
@@ -20,7 +19,7 @@ module Low
     end
 
     def error_message(value:)
-      "Invalid variable type #{output(value:)} in '#{name.class}:#{@file.start_line}'. Valid types: '#{type_expression.valid_types}'"
+      "Invalid variable type #{output(value:)} in '#{name.class}:#{@start_line}'. Valid types: '#{type_expression.valid_types}'"
     end
   end
 end

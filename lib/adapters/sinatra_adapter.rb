@@ -18,7 +18,8 @@ module Low
       end
 
       def process # rubocop:disable Metrics/AbcSize
-        method_calls = @parser.method_calls(method_names: %i[get post patch put delete options query])
+        file_path = @class_proxy.file_proxy.file_path
+        method_calls = @class_proxy.method_calls(%i[get post patch put delete options query])
 
         # Type check return values.
         method_calls.each do |method_call|
@@ -26,12 +27,13 @@ module Low
           next unless arguments_node.is_a?(Prism::ArgumentsNode)
 
           pattern = arguments_node.arguments.first.content
+          name = "#{method_node.name.upcase} #{pattern}"
+          start_line = method_call.start_line
 
-          file = ProxyFactory.file_proxy(node: method_call, path: @file_path, scope: "#{@klass}##{method_call.name}")
-          next unless (return_proxy = return_proxy(method_node: method_call, pattern:, file:))
+          next unless (return_proxy = ProxyFactory.return_proxy(method_node: method_call, name:, file_path:, start_line:, scope: pattern))
 
           route = "#{method_call.name.upcase} #{pattern}"
-          params = [ParamProxy.new(expression: nil, name: :route, type: :req, position: 0, file:)]
+          params = [ParamProxy.new(expression: nil, name: :route, type: :req, position: 0, file_path:)]
           @klass.low_methods[route] = MethodProxy.new(name: method_call.name, params:, return_proxy:)
         end
       end

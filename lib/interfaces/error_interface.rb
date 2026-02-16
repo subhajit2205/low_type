@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 module Low
+  # Used by proxies to output errors.
   class ErrorInterface
-    attr_reader :file
+    attr_reader :file_path, :start_line, :scope
 
-    def initialize
-      @file = nil
+    def initialize(file_path:, start_line:, scope:)
+      @file_path = file_path
+      @start_line = start_line
+      @scope = scope
+
       @output_mode = LowType.config.output_mode
       @output_size = LowType.config.output_size
     end
@@ -34,8 +38,8 @@ module Low
       # Remove LowType defined method file paths from the backtrace.
       filtered_backtrace = backtrace.reject { |line| hidden_paths.find { |file_path| line.include?(file_path) } }
 
-      # Add the proxied file to the backtrace.
-      proxy_file_backtrace = "#{file.path}:#{file.start_line}:in '#{file.scope}'"
+      # Add the proxied entity to the backtrace.
+      proxy_file_backtrace = "#{file_path}:#{start_line}:in '#{scope}'"
       from_prefix = filtered_backtrace.first.match(/\s+from /)
       proxy_file_backtrace = "#{from_prefix}#{proxy_file_backtrace}" if from_prefix
 

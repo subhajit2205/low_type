@@ -47,7 +47,7 @@ module Low
             file = ProxyFactory.file_proxy(path: file_path, node: method_node, scope: "#{klass}##{name}")
 
             param_proxies = ProxyFactory.param_proxies(method_node:, file:)
-            return_proxy = ProxyFactory.return_proxy(method_node:, file:)
+            return_proxy = ProxyFactory.return_proxy(method_node:, file:, name: method_node.name)
             method_proxy = MethodProxy.new(name:, params: param_proxies, return_proxy:, file:)
 
             Repository.save(method: method_proxy, klass:)

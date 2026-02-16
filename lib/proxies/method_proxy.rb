@@ -1,19 +1,13 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-
 module Low
   class MethodProxy
-    extend Forwardable
+    attr_reader :name, :params, :return_proxy
 
-    attr_reader :name, :file, :params, :return_proxy
+    def initialize(file_path:, start_line:, scope:, name:, params: [], return_proxy: nil)
+      super(file_path:, start_line:, scope:)
 
-    # File is queried by redefiner but not sinatra adapter nor type accessors.
-    def_delegators :@file, :start_line, :end_line, :lines?
-
-    def initialize(name:, file: nil, params: [], return_proxy: nil)
       @name = name
-      @file = file
       @params = params
       @return_proxy = return_proxy
     end

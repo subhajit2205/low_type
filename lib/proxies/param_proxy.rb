@@ -7,14 +7,13 @@ module Low
   class ParamProxy < ErrorInterface
     attr_reader :expression, :name, :type, :position
 
-    def initialize(expression:, name:, type:, file:, position: nil)
-      super()
+    def initialize(expression:, name:, type:, file_path:, start_line:, scope:, position: nil)
+      super(file_path:, start_line:, scope:)
 
       @expression = expression
       @name = name
       @type = type
       @position = position
-      @file = file
     end
 
     def required?

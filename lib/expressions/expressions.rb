@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../factories/expression_factory'
-require_relative '../proxies/file_proxy'
 require_relative '../proxies/local_proxy'
 require_relative '../types/error_types'
 
@@ -11,8 +10,9 @@ module Low
       value = type_expression.default_value
 
       last_caller = caller_locations(1, 1).first
-      file = FileProxy.new(path: last_caller.path, start_line: last_caller.lineno, scope: 'local type')
-      proxy = LocalProxy.new(type_expression:, name: self, file:)
+      file_path = last_caller.path
+      start_line = last_caller.lineno
+      proxy = LocalProxy.new(type_expression:, name: self, file_path:, start_line:, scope: 'local type')
 
       type_expression.validate!(value:, proxy:)
 
