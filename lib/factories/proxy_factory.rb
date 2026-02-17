@@ -5,10 +5,8 @@ require 'lowkey'
 
 require_relative '../expressions/expressions'
 require_relative '../expressions/type_expression'
-require_relative '../proxies/file_proxy'
 require_relative '../proxies/param_proxy'
 require_relative '../proxies/return_proxy'
-require_relative '../queries/file_parser'
 require_relative '../syntax/syntax'
 require_relative '../types/complex_types'
 require_relative '../types/status'
@@ -20,13 +18,6 @@ module Low
     class << self
       include Low::Expressions
       include Low::Types
-
-      def file_proxy(node:, path:, scope:)
-        start_line = node.respond_to?(:start_line) ? node.start_line : nil
-        end_line = node.respond_to?(:end_line) ? node.end_line : nil
-
-        FileProxy.new(path:, start_line:, end_line:, scope:)
-      end
 
       # The evals below aren't a security risk because the code comes from a trusted source; the file itself that did the include.
       def param_proxies(method_node:, file:)
