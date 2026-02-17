@@ -33,8 +33,9 @@ module Low
           next unless (return_proxy = ProxyFactory.return_proxy(method_node:, name:, file_path:, scope: pattern))
 
           route = "#{method_node.name.upcase} #{pattern}"
-          params = [ParamProxy.new(expression: nil, name: :route, type: :req, file_path:, start_line:, scope:, position: 0)]
-          @klass.low_methods[route] = MethodProxy.new(file_path:, start_line:, scope:, name: method_node.name, params:, return_proxy:)
+          name = method_node.name
+          param_proxies = [ParamProxy.new(expression: nil, name: :route, type: :req, file_path:, start_line:, scope:, position: 0)]
+          @klass.low_methods[route] = MethodProxy.new(file_path:, start_line:, scope:, name:, param_proxies:, return_proxy:)
         end
       end
 

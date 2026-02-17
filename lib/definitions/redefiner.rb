@@ -25,7 +25,7 @@ module Low
       end
 
       def untyped_args(args:, kwargs:, method_proxy:) # rubocop:disable Metrics/AbcSize
-        method_proxy.params.each do |param_proxy|
+        method_proxy.param_proxies.each do |param_proxy|
           value = param_proxy.position ? args[param_proxy.position] : kwargs[param_proxy.name]
 
           next unless value.nil?
@@ -49,7 +49,7 @@ module Low
 
             param_proxies = ProxyFactory.param_proxies(method_node:, file_path:, scope:)
             return_proxy = ProxyFactory.return_proxy(method_node:, name:, file_path:, scope:)
-            method_proxy = MethodProxy.new(file_path:, start_line: method_node.start_line, scope:, name:, params: param_proxies, return_proxy:)
+            method_proxy = MethodProxy.new(file_path:, start_line: method_node.start_line, scope:, name:, param_proxies:, return_proxy:)
 
             Repository.save(method: method_proxy, klass:)
           # When we can't parse the method's params or return type then skip it.
@@ -71,7 +71,7 @@ module Low
               # Inlined version of Repository.load() for performance increase.
               method_proxy = instance_of?(Class) ? low_methods[name] : self.class.low_methods[name] || Object.low_methods[name]
 
-              method_proxy.params.each do |param_proxy|
+              method_proxy.param_proxies.each do |param_proxy|
                 value = param_proxy.position ? args[param_proxy.position] : kwargs[param_proxy.name]
                 value = param_proxy.expression.default_value if value.nil? && !param_proxy.required?
 
@@ -114,6 +114,7 @@ module Low
 
       def method_has_types?(method_proxy:, class_proxy:, klass:)
         if method_proxy.params == [] && method_proxy.return_proxy.nil?
+        if method_proxy.param_proxies == [] && method_proxy.return_proxy.nil?
           Low::Repository.delete(name: method_proxy.name, klass:)
           return false
         end

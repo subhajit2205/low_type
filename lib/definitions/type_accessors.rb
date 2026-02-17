@@ -34,12 +34,12 @@ module Low
         start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
-        params = [ParamProxy.new(expression: type_expression(expression), name:, type: :hashreq, file_path:, start_line:, scope:)]
-        @low_methods["#{name}="] = MethodProxy.new(file_path:, start_line:, scope:, name:, params:)
+        param_proxies = [ParamProxy.new(expression: type_expression(expression), name:, type: :hashreq, file_path:, start_line:, scope:)]
+        @low_methods["#{name}="] = MethodProxy.new(file_path:, start_line:, scope:, name:, param_proxies:)
 
         define_method("#{name}=") do |value|
           method_proxy = self.class.low_methods["#{name}="]
-          method_proxy.params.first.expression.validate!(value:, proxy: method_proxy.params.first)
+          method_proxy.param_proxies.first.expression.validate!(value:, proxy: method_proxy.param_proxies.first)
           instance_variable_set("@#{name}", value)
         end
       end
