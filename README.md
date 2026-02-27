@@ -209,8 +209,8 @@ LowType.configure do |config|
   config.output_mode = :type
   config.output_size = 100
 
-  # Set to "true" to type check all elements of an Array/Hash (not just the first)
-  config.deep_type_check = false
+  # Set to "false" to type check only the first element of an Array/Hash (performance vs accuracy).
+  config.deep_type_check = true
 
   # The "|" pipe syntax requires a monkey-patch but can be disabled if you don't need union types with default values.
   # This is the only monkey-patch in the entire library and is a relatively harmless one, see "syntax/union_types.rb".

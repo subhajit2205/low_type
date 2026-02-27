@@ -49,7 +49,7 @@ module LowType
         :deep_type_check,
         :union_type_expressions
       )
-      @config ||= config.new(true, :error, :type, 100, false, true)
+      @config ||= config.new(true, :error, :type, 100, true, true)
     end
 
     def configure
