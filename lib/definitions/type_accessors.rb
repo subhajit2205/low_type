@@ -13,11 +13,9 @@ module Low
         start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
-        type_expression = type_expression(exp)
-        return_proxy = ReturnProxy.new(type_expression:, name:, file_path:, start_line:, scope:)
+        type_expression = cast_type_expression(exp)
         return_proxy = ::Lowkey::ReturnProxy.new(type_expression:, name:, file_path:, start_line:, scope:)
 
-        @low_methods[name] = MethodProxy.new(file_path:, start_line:, scope:, name:, return_proxy:)
         @low_methods[name] = ::Lowkey::MethodProxy.new(file_path:, start_line:, scope:, name:, return_proxy:)
 
         define_method(name) do
@@ -36,8 +34,7 @@ module Low
         start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
-        param_proxies = [ParamProxy.new(expression: type_expression(expression), name:, type: :hashreq, file_path:, start_line:, scope:)]
-        @low_methods["#{name}="] = MethodProxy.new(file_path:, start_line:, scope:, name:, param_proxies:)
+        param_proxies = [ParamProxy.new(expression: cast_type_expression(expression), name:, type: :hashreq, file_path:, start_line:, scope:)]
         @low_methods["#{name}="] = ::Lowkey::MethodProxy.new(file_path:, start_line:, scope:, name:, param_proxies:)
 
         define_method("#{name}=") do |value|
@@ -57,7 +54,7 @@ module Low
 
     private
 
-    def type_expression(expression)
+    def cast_type_expression(expression)
       if expression.is_a?(::Expressions::Expression)
         expression
       elsif ::Low::TypeQuery.type?(expression)
