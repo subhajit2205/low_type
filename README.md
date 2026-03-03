@@ -354,11 +354,11 @@ sequenceDiagram
     participant Methods@{ "type" : "collections" }
   end
 
-  Lowkey->>Proxies: Parses
+  Lowkey->>Proxies: Parses AST
   Proxies->>Expressions: Stores
   LowType->>Expressions: Evaluates
-  LowType->>Methods: Validates
-  Methods-->>Expressions: Validate per method call or disable per environment
+  LowType->>Methods: Redefines
+  Methods-->>Expressions: Validates per method call or disable per environment
 ```
 
 ## Philosophy

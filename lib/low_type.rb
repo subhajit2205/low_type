@@ -5,7 +5,7 @@ require 'lowkey'
 require_relative 'adapters/adapter_loader'
 require_relative 'definitions/redefiner'
 require_relative 'definitions/type_accessors'
-require_relative 'expressions/expressions'
+require_relative 'expressions/expression_helpers'
 require_relative 'queries/file_query'
 require_relative 'syntax/syntax'
 require_relative 'types/complex_types'
@@ -24,8 +24,11 @@ require_relative 'types/complex_types'
 #      │              │                 │ Evaluates       │               │
 #      │              │                 │◄────────────────┤               │
 #      │              │                 │                 │               │
-#      │              │                 │                 │ Validates     │
+#      │              │                 │                 │ Redefines     │
 #      │              │                 │                 ├──────────────►│
+#      │              │                 │                 │               │
+#      │              │                 │ Validates       │               │
+#      │              │                 │◄┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┤
 #      │              │                 │                 │               │
 module LowType
   # We do as much as possible on class load rather than on instantiation to be thread-safe and efficient.
@@ -40,7 +43,7 @@ module LowType
 
     klass.extend Low::TypeAccessors
     klass.include Low::Types
-    klass.include Low::Expressions
+    klass.include Low::ExpressionHelpers
     klass.prepend Low::Redefiner.redefine(method_proxies: class_proxy.instance_methods, class_proxy:, klass:)
     klass.singleton_class.prepend Low::Redefiner.redefine(method_proxies: class_proxy.class_methods, class_proxy:, klass:)
 

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative '../factories/expression_factory'
+require_relative '../definitions/evaluator'
 require_relative '../proxies/local_proxy'
 require_relative '../types/error_types'
 
 module Low
-  module Expressions
+  module ExpressionHelpers
     def type(type_expression)
       value = type_expression.default_value
 
@@ -25,7 +25,7 @@ module Low
     alias low_type type
 
     def value(type)
-      ExpressionFactory.type_expression_with_value(type:)
+      Evaluator.type_expression_with_value(type:)
     end
     alias low_value value
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../expressions/value_expression'
+require_relative '../definitions/evaluator'
 
 module Low
   # Redefine methods to have their arguments and return values type checked.
@@ -8,7 +9,7 @@ module Low
     class << self
       def redefine(method_proxies:, class_proxy:, klass:)
         method_proxies.values.each do |method_proxy|
-          ExpressionFactory.load_method_expressions(method_proxy:)
+          Evaluator.load_method_expressions(method_proxy:)
         end
 
         if LowType.config.type_checking
