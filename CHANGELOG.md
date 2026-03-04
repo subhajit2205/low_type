@@ -9,8 +9,8 @@ Minor features that don't break backwards compatibility are released as patches.
 
 ### Added
 
-- Use repository pattern to `export` method definitions to RBS
-- Dynamically redefefine includer class methods when `binding.pry` called to avoid `step`ing through this code
+- Use Lowkey to export method definitions to RBS
+- Dynamically redefine includer class methods when `binding.pry` called to avoid `step`ing through this code
 
 ## 1.2.0 [UNRELEASED]
 
@@ -20,6 +20,13 @@ Minor features that don't break backwards compatibility are released as patches.
 - `Boolean` type support
 - Complex types validation
 - Error mode config
+
+## 1.1.10
+
+### Changed
+
+- Deeper Lowkey integration
+- Better architecture documentation
 
 ## 1.1.9
 
