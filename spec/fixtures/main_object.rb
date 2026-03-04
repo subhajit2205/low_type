@@ -2,6 +2,7 @@
 
 require_relative '../../lib/low_type'
 
+# Be very careful when doing this in a big app as it will include LowType on every class!
 include LowType # rubocop:disable Style/MixinUsage
 
 def arg(greeting)

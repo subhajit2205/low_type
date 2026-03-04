@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Comment out and run test individually.
+return
+
+# Including LowType on main object will fuck up other tests!
 require_relative '../fixtures/main_object'
 
 RSpec.describe 'main object' do

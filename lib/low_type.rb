@@ -43,7 +43,7 @@ module LowType
 
     Low::Evaluator.evaluate(method_proxies: class_proxy.keyed_methods)
 
-    klass.extend Low::ExpressionHelpers # Investigate "value()" helper being added to Prism classes if "include"d instead.
+    klass.include Low::ExpressionHelpers
     klass.extend Low::TypeAccessors
     klass.extend Low::Types
 
