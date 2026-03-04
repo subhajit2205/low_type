@@ -55,15 +55,14 @@ module Low
             name = param_proxy.name
             type = param_proxy.type
 
-            
-            value = self.new.instance_evaluate(proxy: param_proxy)
+            expression = self.new.instance_evaluate(proxy: param_proxy)
 
-            if value.is_a?(::Expressions::Expression)
-              param_proxy.expression = value
-            elsif value.instance_of?(Class) && value.name == 'Low::LowDependency'
-              param_proxy.expression = value.new(provider_key: name)
-            elsif ::Low::TypeQuery.type?(value)
-              param_proxy.expression = TypeExpression.new(type: value)
+            if expression.is_a?(::Expressions::Expression)
+              param_proxy.expression = expression
+            elsif expression.instance_of?(Class) && expression.name == 'Low::LowDependency'
+              param_proxy.expression = expression.new(provider_key: name)
+            elsif ::Low::TypeQuery.type?(expression)
+              param_proxy.expression = TypeExpression.new(type: expression)
             end
           end
         rescue NameError
