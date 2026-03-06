@@ -59,7 +59,7 @@ module Low
 
             if expression.is_a?(::Expressions::Expression)
               param_proxy.expression = expression
-            elsif expression.instance_of?(Class) && expression.name == 'Low::LowDependency'
+            elsif expression.instance_of?(Class) && expression.name == 'Low::Dependency'
               param_proxy.expression = expression.new(provider_key: name)
             elsif ::Low::TypeQuery.type?(expression)
               param_proxy.expression = TypeExpression.new(type: expression)
