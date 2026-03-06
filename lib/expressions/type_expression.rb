@@ -36,6 +36,12 @@ module Low
       end
 
       @types.each do |type|
+
+        # Boolean validation
+        if type == Boolean
+          return true if value == true || value == false
+        end
+        
         return true if type_matches_value?(type:, value:, proxy:)
         return true if type.is_a?(Array) && value.is_a?(Array) && array_types_match_values?(types: type, values: value, proxy:)
         return true if type.is_a?(Hash) && value.is_a?(Hash) && hash_types_match_values?(types: type, values: value)

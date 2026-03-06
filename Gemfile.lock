@@ -36,6 +36,7 @@ GEM
     method_source (1.1.0)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
+    ostruct (0.6.3)
     parallel (1.27.0)
     parser (3.3.10.0)
       ast (~> 2.4.1)
@@ -110,6 +111,7 @@ DEPENDENCIES
   low_dependency!
   low_type!
   lowkey!
+  ostruct
   pry
   pry-nav
   rack
