@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../lib/low_type'
+
 RSpec.describe 'LowType.config.type_checking' do
   context 'when type checking is disabled' do
     subject(:type_checking) { TypeCheckingDisabled.new }
