@@ -22,7 +22,7 @@ module Low
       @types << type unless type.nil?
       @default_value = default_value
       # TODO: Override per type expression with a config expression.
-      @deep_type_check = LowType.config.deep_type_check
+      @deep_type_check = nil
     end
 
     def required?
@@ -141,7 +141,9 @@ module Low
     end
 
     def deep_type_check?
-      @deep_type_check || LowType.config.deep_type_check || false
+      return @deep_type_check unless @deep_type_check.nil?
+
+      LowType.config.deep_type_check
     end
   end
 end

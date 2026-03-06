@@ -181,11 +181,14 @@ RSpec.describe LowHello do
       end
     end
 
-    context 'when nil is not the first element' do
+    context 'when nil is the second element' do
       let(:error_message) { "Invalid argument type 'Array' for parameter 'greetings'. Valid types: '[String]'" }
       let(:greetings) { ['Hi', nil, 'Howdy'] }
 
       context 'without deep type check' do
+        before { LowType.configure { |config| config.deep_type_check = false } }
+        after { LowType.configure { |config| config.deep_type_check = true } }
+
         it 'passes through the argument' do
           expect(hello.typed_array_arg(greetings)).to eq(greetings)
         end
