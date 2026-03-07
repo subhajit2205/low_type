@@ -361,6 +361,11 @@ sequenceDiagram
   Methods-->>Expressions: Validates per method call or disable per environment
 ```
 
+Three distinct phases isolate concerns:
+1. **File Load:** Code is parsed into an Abstract Syntax Tree but not evaluated (stored as strings)
+2. **Class Load:** Constants and expressions are evaluated into real Ruby objects
+3. **Runtime:** Method argument types and return types are defined (optionally validated)
+
 ## Philosophy
 
 🦆 **Duck typing is beautiful.** Ruby is an amazing language **BECAUSE** it's not typed. I don't believe Ruby should ever be fully typed, but you should be able to sprinkle in types into some areas of your codebase where you'd like self-documentation and a little reassurance that the right values are coming in/out.
