@@ -9,20 +9,17 @@ module Low
     def type_reader(named_expressions)
       named_expressions.each do |name, exp|
         last_caller = caller_locations(1, 1).first
+
         file_path = last_caller.path
         start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
-        type_expression = cast_type_expression(exp)
-        return_proxy = ::Lowkey::ReturnProxy.new(type_expression:, name:, file_path:, start_line:, scope:)
-
-        @low_methods[name] = ::Lowkey::MethodProxy.new(file_path:, start_line:, scope:, name:, return_proxy:)
+        expression = cast_type_expression(exp)
+        proxy = ::Lowkey::ReturnProxy.new(file_path:, start_line:, scope:, name:, expression:)
 
         define_method(name) do
-          method_proxy = Lowkey[file_path][self.class.name][__method__]
-
           value = instance_variable_get("@#{name}")
-          type_expression.validate!(value:, proxy: method_proxy.return_proxy)
+          expression.validate!(value:, proxy:)
           value
         end
       end
@@ -31,16 +28,16 @@ module Low
     def type_writer(named_expressions) # rubocop:disable Metrics/AbcSize
       named_expressions.each do |name, expression|
         last_caller = caller_locations(1, 1).first
+
         file_path = last_caller.path
         start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
-        param_proxies = [::Lowkey::ParamProxy.new(expression: cast_type_expression(expression), name:, type: :hashreq, file_path:, start_line:, scope:)]
-        @low_methods["#{name}="] = ::Lowkey::MethodProxy.new(file_path:, start_line:, scope:, name:, param_proxies:)
+        expression = cast_type_expression(expression)
+        proxy = ::Lowkey::ParamProxy.new(file_path:, start_line:, scope:, name:, type: :key_req, expression:)
 
         define_method("#{name}=") do |value|
-          method_proxy = self.class.low_methods["#{name}="]
-          method_proxy.param_proxies.first.expression.validate!(value:, proxy: method_proxy.param_proxies.first)
+          expression.validate!(value:, proxy:)
           instance_variable_set("@#{name}", value)
         end
       end

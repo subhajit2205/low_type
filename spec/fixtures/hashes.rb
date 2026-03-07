@@ -2,7 +2,7 @@
 
 require_relative '../../lib/low_type'
 
-class LowHash
+class Hashes
   include LowType
 
   def initialize(hash: Hash[String => String])

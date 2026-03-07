@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
-require_relative '../fixtures/low_hash'
+require_relative '../fixtures/hashes'
 
-RSpec.describe 'Hash[T]' do
-  subject(:low_hash) { LowHash.new(hash:) }
+RSpec.describe Hashes do
+  subject { Hashes.new(hash:) }
+
   let(:hash) { { 'Hello' => 'Goodbye' } }
 
   describe '#initialize' do
     it 'instantiates a typed class' do
-      expect { low_hash }.not_to raise_error
+      expect { subject }.not_to raise_error
     end
 
     context 'when the arg type is incorrect' do
@@ -16,14 +17,14 @@ RSpec.describe 'Hash[T]' do
       let(:error_message) { "Invalid argument type 'Integer' for parameter 'hash'. Valid types: '{String => String}'" }
 
       it 'raises an invalid type error' do
-        expect { low_hash }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
 
   describe '#typed_hash_arg' do
     it 'passes through the argument' do
-      expect(low_hash.typed_hash_arg({ 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
+      expect(subject.typed_hash_arg({ 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
     end
 
     context 'when arg is wrong type' do
@@ -32,7 +33,7 @@ RSpec.describe 'Hash[T]' do
       end
 
       it 'raises an argumment type error' do
-        expect { low_hash.typed_hash_arg({ 123 => 456 }) }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject.typed_hash_arg({ 123 => 456 }) }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 
@@ -42,14 +43,14 @@ RSpec.describe 'Hash[T]' do
       end
 
       it 'raises an argument error' do
-        expect { low_hash.typed_hash_arg }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject.typed_hash_arg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
 
   describe '#typed_hash_kwarg' do
     it 'passes through the argument' do
-      expect(low_hash.typed_hash_kwarg(greetings: { 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
+      expect(subject.typed_hash_kwarg(greetings: { 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
     end
 
     context 'when arg is wrong type' do
@@ -58,7 +59,7 @@ RSpec.describe 'Hash[T]' do
       end
 
       it 'raises an argumment type error' do
-        expect { low_hash.typed_hash_kwarg(greetings: { 123 => 456 }) }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject.typed_hash_kwarg(greetings: { 123 => 456 }) }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 
@@ -68,26 +69,26 @@ RSpec.describe 'Hash[T]' do
       end
 
       it 'raises an argument error' do
-        expect { low_hash.typed_hash_kwarg }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject.typed_hash_kwarg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end
 
   describe '#typed_hash_arg_and_default_value' do
     it 'passes through the argument' do
-      expect(low_hash.typed_hash_arg_and_default_value({ 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
+      expect(subject.typed_hash_arg_and_default_value({ 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
     end
 
     context 'when no arg provided' do
       it 'provides the default value' do
-        expect(low_hash.typed_hash_arg_and_default_value).to eq({ 'Hola' => 'Adios' })
+        expect(subject.typed_hash_arg_and_default_value).to eq({ 'Hola' => 'Adios' })
       end
     end
   end
 
   describe '#typed_hash_kwarg' do
     it 'passes through the argument' do
-      expect(low_hash.typed_hash_kwarg(greetings: { 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
+      expect(subject.typed_hash_kwarg(greetings: { 'Hello' => 'Goodbye' })).to eq({ 'Hello' => 'Goodbye' })
     end
 
     context 'when arg is wrong type' do
@@ -96,7 +97,7 @@ RSpec.describe 'Hash[T]' do
       end
 
       it 'raises an argumment type error' do
-        expect { low_hash.typed_hash_kwarg(greetings: { 123 => 456 }) }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject.typed_hash_kwarg(greetings: { 123 => 456 }) }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
 
@@ -106,7 +107,7 @@ RSpec.describe 'Hash[T]' do
       end
 
       it 'raises an argument error' do
-        expect { low_hash.typed_hash_kwarg }.to raise_error(Low::ArgumentTypeError, error_message)
+        expect { subject.typed_hash_kwarg }.to raise_error(Low::ArgumentTypeError, error_message)
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/types/error_types'
-require_relative '../fixtures/low_instance'
+require_relative '../fixtures/type_accessors'
 
 RSpec.describe 'TypeAccessors' do
   describe '#type_reader' do

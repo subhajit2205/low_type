@@ -27,17 +27,6 @@ class LowHello
     greeting
   end
 
-  # Types as values.
-
-  def typed_arg_and_typed_default_value(greeting = String | value(String))
-    greeting
-  end
-
-  def typed_arg_and_invalid_default_typed_value(greeting = String | Array[Symbol] | value(Integer))
-    # => raises TypeError... a default value(T) that is not nil still has to be a valid type.
-    greeting
-  end
-
   # Multiple types.
 
   def multiple_typed_args(greeting = String | Integer)
@@ -46,28 +35,6 @@ class LowHello
 
   def multiple_typed_args_and_default_value(greeting = String | Integer | 'Salutations')
     greeting
-  end
-
-  # Enumerables.
-
-  def typed_array_arg(greetings = Array[String])
-    greetings
-  end
-
-  def typed_nilable_array_arg(goodbyes = Array[String | nil])
-    goodbyes
-  end
-
-  def typed_nilable_array_arg_and_default_nil(greetings = Array[String | nil] | nil)
-    greetings
-  end
-
-  def typed_array_arg_and_default_nil(greetings = Array[String] | nil)
-    greetings
-  end
-
-  def typed_array_arg_and_default_value(greetings = Array[String] | %w[Hi Hey Howdy])
-    greetings
   end
 
   private
