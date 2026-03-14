@@ -34,7 +34,7 @@ module LowType
   # We do as much as possible on class load rather than on object instantiation to be thread-safe and efficient.
   def self.included(klass)
     file_path = Low::FileQuery.file_path(klass:)
-    file_proxy = Lowkey.load(file_path:)
+    file_proxy = Lowkey.load(file_path)
     class_proxy = file_proxy[klass.name]
 
     Low::Evaluator.evaluate(method_proxies: class_proxy.keyed_methods)
