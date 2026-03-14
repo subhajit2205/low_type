@@ -75,11 +75,12 @@ module Low
 
               super(*args, **kwargs)
             end
-
-            private method_proxy.name if class_proxy.private_start_line && method_proxy.start_line > class_proxy.private_start_line
+          if class_proxy.private_start_line && method_proxy.start_line >= class_proxy.private_start_line
+           private method_proxy.name
           end
         end
       end
+    end
 
       def untyped_methods(method_proxies:, class_proxy:)
         Module.new do
@@ -92,8 +93,9 @@ module Low
               args, kwargs = Low::Redefiner.untyped_args(args:, kwargs:, method_proxy:)
               super(*args, **kwargs)
             end
-
-            private method_proxy.name if class_proxy.private_start_line && method_proxy.start_line > class_proxy.private_start_line
+            if class_proxy.private_start_line && method_proxy.start_line >= class_proxy.private_start_line
+              private method_proxy.name
+            end
           end
         end
       end

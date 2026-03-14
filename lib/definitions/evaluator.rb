@@ -37,7 +37,9 @@ module Low
 
     def instance_evaluate(proxy:)
       # Not a security risk because the code comes from a trusted source; the file that included lowtype.
-      eval(proxy.value, binding, proxy.file_path, proxy.start_line) # rubocop:disable Security/Eval
+      return nil unless proxy.value
+    
+      eval(proxy.value, binding, proxy.file_path || __FILE__, proxy.start_line || __LINE__)  # rubocop:disable Security/Eval
     end
 
     class << self
@@ -53,12 +55,13 @@ module Low
       def evaluate_param_proxy_expressions(method_proxy:)
         begin # rubocop:disable Style/RedundantBegin
           method_proxy.tagged_params(:value).each do |param_proxy|
+            next unless param_proxy.value
+
             # TODO: Evaluate in the binding of the class that included LowType if not a type managed by LowType.
             expression = new.instance_evaluate(proxy: param_proxy)
             param_proxy.expression = cast_type_expression(expression:, method_proxy:)
           end
         rescue NameError
-          mp = method_proxy
           raise NameError, "Unknown type '#{mp.value}' for #{mp.scope} at #{mp.file_path}:#{mp.start_line}"
         end
       end
