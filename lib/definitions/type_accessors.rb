@@ -2,6 +2,7 @@
 
 require_relative '../expressions/type_expression'
 require_relative '../proxies/return_proxy'
+require_relative '../proxies/param_proxy'
 require_relative '../queries/type_query'
 
 module Low
@@ -15,7 +16,7 @@ module Low
         scope = "#{self}##{name}"
 
         expression = cast_type_expression(exp)
-        proxy = ::Lowkey::ReturnProxy.new(file_path:, start_line:, scope:, name:, expression:)
+        proxy = ::Lowkey::ReturnProxy.new(file_path: file_path, start_line: start_line, scope: scope, name: name, expression: expression, source: nil)
 
         define_method(name) do
           value = instance_variable_get("@#{name}")
@@ -34,7 +35,7 @@ module Low
         scope = "#{self}##{name}"
 
         expression = cast_type_expression(expression)
-        proxy = ::Lowkey::ParamProxy.new(file_path:, start_line:, scope:, name:, type: :key_req, expression:)
+        proxy = ::Lowkey::ParamProxy.new(file_path: file_path, start_line: start_line, scope: scope, name: name, expression: expression, type: :key_req, source: nil)
 
         define_method("#{name}=") do |value|
           expression.validate!(value:, proxy:)
