@@ -50,6 +50,10 @@ module Low
       types = @types.map do |type|
         if type.is_a?(Array)
           "[#{type.map { |subtype| valid_subtype(subtype:) }.join(', ')}]"
+        elsif type.is_a?(Hash)
+          key = type.keys.first
+          value = type.values.first
+          "{#{key} => #{value}}"  
         else
           type.inspect.to_s.delete_prefix('Low::Types::')
         end
