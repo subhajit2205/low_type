@@ -5,9 +5,14 @@ require_relative 'error_types'
 
 module Low
   module Types
-    # Status is an Integer for type checking, but an instance of StatusCode for advanced functionality.
+    # Status is an Integer for basic type checking...
     class Status < Integer
       extend ComplexType
+
+      # ...but becomes an instance of StatusCode when called with "Status[:code]" for advanced type checking (status + code).
+      def self.[](status_code)
+        @status_code = StatusCode.new(status_code)
+      end
 
       class StatusCode
         attr_reader :status_code
@@ -43,10 +48,6 @@ module Low
         def hash
           [self.class, @status_code].hash
         end
-      end
-
-      def self.[](status_code)
-        @status_code = StatusCode.new(status_code)
       end
     end
   end

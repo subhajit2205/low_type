@@ -11,11 +11,12 @@ module Low
         last_caller = caller_locations(1, 1).first
 
         file_path = last_caller.path
-        start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
         expression = cast_type_expression(exp)
-        proxy = ::Lowkey::ReturnProxy.new(file_path:, start_line:, scope:, name:, expression:)
+        # Source usually defined on file load with access to lines in a source file, but type accessors are defined on class load.
+        source = ::Lowkey::Source.new(file_path:, scope:, lines: [], start_line: last_caller.lineno, end_line: last_caller.lineno)
+        proxy = ::Lowkey::ReturnProxy.new(name:, source:, expression:)
 
         define_method(name) do
           value = instance_variable_get("@#{name}")
@@ -30,11 +31,12 @@ module Low
         last_caller = caller_locations(1, 1).first
 
         file_path = last_caller.path
-        start_line = last_caller.lineno
         scope = "#{self}##{name}"
 
         expression = cast_type_expression(expression)
-        proxy = ::Lowkey::ParamProxy.new(file_path:, start_line:, scope:, name:, type: :key_req, expression:)
+        # Source usually defined on file load with access to lines in a source file, but type accessors are defined on class load.
+        source = ::Lowkey::Source.new(file_path:, scope:, lines: [], start_line: last_caller.lineno, end_line: last_caller.lineno)
+        proxy = ::Lowkey::ParamProxy.new(name:, source:, type: :pos_req, position: nil, expression:)
 
         define_method("#{name}=") do |value|
           expression.validate!(value:, proxy:)

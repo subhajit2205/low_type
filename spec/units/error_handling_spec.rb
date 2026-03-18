@@ -6,12 +6,13 @@ require_relative '../../lib/types/error_types'
 
 RSpec.describe Low::ErrorHandling do
   subject(:param_proxy) do
-    Lowkey::ParamProxy.new(file_path:, start_line:, scope:, name: :dummy_method, type: :opt_req)
+    source = ::Lowkey::Source.new(file_path:, scope:, lines: [], start_line:, end_line:)
+    ::Lowkey::ParamProxy.new(name: :dummy_method, source:, type: :pos_req)
   end
 
-  let(:expression) { Low::TypeExpression.new(default_value: nil) }
   let(:file_path) { '/Users/name/dev/app/lib/my_class' }
   let(:start_line) { 123 }
+  let(:end_line) { 123 }
   let(:scope) { 'MyClass#my_method' }
 
   describe '#initialize' do

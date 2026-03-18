@@ -61,6 +61,7 @@ module Low
 
                 value = positional ? args[param_proxy.position] : kwargs[param_proxy.name]
                 value = param_proxy.expression.default_value if value.nil? && !param_proxy.expression.required?
+
                 param_proxy.expression.validate!(value:, proxy: param_proxy)
                 value = value.value if value.is_a?(ValueExpression)
 
