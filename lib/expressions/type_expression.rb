@@ -56,7 +56,7 @@ module Low
       end
 
       types << 'nil' if @default_value.nil?
-      types.join(' | ')
+      types.join(' | ').gsub('=>', ' => ')
     end
 
     private
